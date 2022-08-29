@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { v4 } from 'uuid';
 import { useSelector,useDispatch } from 'react-redux';
-
+import { getAllItems } from '../store/actions/items';
 
 const Home = (props) => {
 
@@ -9,12 +9,19 @@ const Home = (props) => {
     const [itemName, setItemName] = useState('');
     const {items} = useSelector(state=>state);
 
+
+    useEffect(()=>{
+        if(!items[0]){
+            getAllItems(dispatch);
+        }
+    },[items])
+
     const saveItem = () => {
         dispatch({
             type:'ADD_NEW_ITEM',
             payload:{
                 id: v4(),
-                name: itemName,
+                title: itemName,
                 completed: false
             }
         });
@@ -28,7 +35,7 @@ const Home = (props) => {
             }
         });
     }
-    
+
     return (
         <div className="w-full flex justify-center mt-3">
             <div >
@@ -42,7 +49,7 @@ const Home = (props) => {
                         {items.map((item) => {
                             return (
                                 <div key={item.id} className='w-full bg-gray-100 p-3 mt-1 flex justify-between'>
-                                    <p className={`${item.completed? 'line-through	':''}`}>{item.name}</p>
+                                    <p className={`${item.completed? 'line-through	':''}`}>{item.title}</p>
                                     <input type="checkbox" checked={item.completed}  onChange={()=>changeStatus(item.id)} />
                                 </div>
                             )
