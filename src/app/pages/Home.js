@@ -1,28 +1,34 @@
 import React, { useState } from 'react'
 import { v4 } from 'uuid';
+import { useSelector,useDispatch } from 'react-redux';
+
 
 const Home = (props) => {
-    const [items, setItems] = useState([{name:"Item1",id:1,completed:true}]);
+
+    const dispatch = useDispatch();
     const [itemName, setItemName] = useState('');
+    const {items} = useSelector(state=>state);
 
     const saveItem = () => {
-        const newItem = {
-            id: v4(),
-            name: itemName,
-            completed: false
-        }
-        setItems([...items, newItem]);
+        dispatch({
+            type:'ADD_NEW_ITEM',
+            payload:{
+                id: v4(),
+                name: itemName,
+                completed: false
+            }
+        });
     }
 
     const changeStatus=(id)=>{
-        const updatedItems = items.map(item=>{
-            if(item.id === id){
-                return {...item,completed:!item.completed}
+        dispatch({
+            type:'MARK_COMPLETED',
+            payload:{
+                id:id
             }
-            return item;
         });
-        setItems(updatedItems);
     }
+    
     return (
         <div className="w-full flex justify-center mt-3">
             <div >

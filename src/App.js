@@ -8,9 +8,11 @@ const App = () => {
   return (
     <BrowserRouter>
       <Menu />
-      <Routes click={alert} />
+      <Routes/>
     </BrowserRouter>
   )
 }
 
-export default App
+export default App;
+
+
